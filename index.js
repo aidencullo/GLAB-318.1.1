@@ -1,6 +1,5 @@
 const http = require('http');
 
-const hostname = '127.0.0.1';
 const port = 3000;
 
 const server = http.createServer((req, res) => {
@@ -8,6 +7,8 @@ const server = http.createServer((req, res) => {
     sayGoodbye(res);
   } else if (req.url === '/') {
     sayHello(res);
+  } else if (req.url === '/secret') {
+    accessSecretFile(res);
   } else {
     notFound(res);
   }
@@ -37,6 +38,14 @@ const notFound = (res) => {
   res.end();
 };
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+const accessSecretFile = (res) => {
+  res.statusCode = 403;
+  res.setHeader('Content-Type', 'text/html');
+  res.write('<h1 style="color: red">403 Forbidden</h1>');
+  res.write('<p>Sorry, you do not have permission to access this page.</p>');
+  res.end();
+};
+
+server.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
